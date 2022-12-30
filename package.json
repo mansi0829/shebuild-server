@@ -1,5 +1,5 @@
 {
-  "name": "shebuild hackathon",
+  "name": "shebuild_hackathon",
   "version": "1.0.0",
   "description": "Backend For shebuild hackathon",
   "main": "server.js",

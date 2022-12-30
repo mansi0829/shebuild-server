@@ -17,15 +17,21 @@ async function register(req, res) {
       record.password,
       parseInt(process.env.SaltRounds)
     );
+    const Token = await generateToken(response);
+
     const response = await User.create({
+      token:Token,
       name: record.name,
       email: record.email,
       password: hashedPassword,
       phone: record.phone,
       role: record.type,
+      description: record.description,
+      gender:record.gender,
+      // image:record.image,
     });
 
-    const Token = await generateToken(response);
+   
     res.json({
       Token,
     });

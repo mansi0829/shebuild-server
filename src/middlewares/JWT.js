@@ -1,4 +1,7 @@
 require("dotenv").config();
+const User = require("../models/user");
+const tokenRouter = require("express").Router();
+const res = require("express/lib/response");
 const JWT = require("jsonwebtoken");
 
 async function generateToken(user) {
@@ -16,7 +19,7 @@ async function generateToken(user) {
 
 async function checkToken(req, res, next) {
   const token = req.headers["authorization"];
-  console.log(token);
+  // console.log(token);
   if (!token) {
     return res.status(400).json({
       msg: "No token found",

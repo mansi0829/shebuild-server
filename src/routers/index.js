@@ -1,10 +1,9 @@
 const Router = require("express").Router();
 const auth = require("../routers/auth");
-const provider = require('./provider')
-const getprovider = require('../controller/provider')
+const provideRouter = require("./provider");
 
 Router.use("/auth", auth);
-Router.use('/provider', getprovider);
+Router.use("/user", provideRouter);
 
 Router.get("", (req, res) => {
   res.send("Welcome");

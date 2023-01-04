@@ -1,38 +1,29 @@
 require("dotenv").config();
-const User = require("../models/user");
-const tokenRouter = require("express").Router();
-const res = require("express/lib/response");
 const JWT = require("jsonwebtoken");
 
 async function generateToken(user) {
   const token = await JWT.sign(
     {
       id: user._id,
+      email: user.email,
     },
-    process.env.Secret,
-    {
-      expiresIn: 6000000,
-    }
+    process.env.Secret
   );
   return token;
 }
 
 async function checkToken(req, res, next) {
-  const token = req.headers["authorization"];
-  // console.log(token);
-  if (!token) {
-    return res.status(400).json({
-      msg: "No token found",
-    });
-  }
+  const authHeader = req.headers["authorization"];
+  if (!authHeader)
+    return res.status(400).json({ error: "User not Authenticated!" });
+
+  const token = authHeader.split(" ")[1];
 
   try {
-    const user = JWT.verify(token, process.env.Secret);
-    req.body.userID = user.id;
-  } catch (error) {
-    return res.status(400).json({
-      msg: "Token Invalid",
-    });
+    const verified = JWT.verify(token, process.env.Secret);
+    req.user = verified;
+  } catch (err) {
+    return res.status(401).send("Invalid Token");
   }
   return next();
 }
